@@ -8,6 +8,7 @@
 #include <stdio.h>
 
 #include "delay-servo.hh"
+#include "logger.hh"
 
 using namespace std;
 
@@ -39,8 +40,8 @@ double hread( uint64_t in )
 
 int main( int argc, char** argv)
 {
-  if (argc < 6) {
-    fprintf(stderr, "usage: controlled-delay eth0-ip eth0-port lte-ip lte-port lte-device\n");
+  if (argc < 7) {
+    fprintf(stderr, "usage: controlled-delay eth0-ip eth0-port lte-ip lte-port lte-device location\n");
     exit(1);
   }
   char* eth0_ip = argv[1];
@@ -48,6 +49,8 @@ int main( int argc, char** argv)
   char* lte_ip = argv[3];
   int lte_port = atoi(argv[4]);
   char* lte_device = argv[5];
+  const char *location = argv[6];
+  const char *note = (argc >= 8) ? argv[7] : "";
 
   /* Create and bind Ethernet socket */
   Socket ethernet_socket;
@@ -136,4 +139,10 @@ int main( int argc, char** argv)
   }
 
   printf("%ld   %ld %ld\n", Socket::timestamp(), num_bits_down, num_bits_up);
+
+  float Mbps_down = ((num_bits_down / 30) / 1.0e6);
+  float Mbps_up = ((num_bits_up / 30) / 1.0e6);
+
+  Logger *logger = new Logger();
+  logger->mysql_log_basic_bitrates(Socket::timestamp(), Mbps_down, Mbps_up, location, note);
 }

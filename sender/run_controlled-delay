@@ -10,5 +10,7 @@ for my $i (1 .. $ARGV[0]) {
     my $lte_ip = '10.100.'.$i.'.1';
     my $lte_port = 9000 + $i;
     my $lte_device = 'usb'.($i-1);
-    system("./controlled-delay $eth0_ip $eth0_port $lte_ip $lte_port $lte_device &");
+    my $location = '64-4';
+    my $note = 'phone'.$i;
+    system("./controlled-delay $eth0_ip $eth0_port $lte_ip $lte_port $lte_device $location $note &");
 }
