@@ -1,10 +1,12 @@
-source = send1way.cc socket.cc buffer-setpoint.cc hist.cc controlled-delay.cc rate-estimate.cc payload.cc history.cc delay-servo.cc saturatr.cc acker.cc saturateservo.cc cellsim.cc select.cc packetsocket.cc
-objects = socket.o hist.o rate-estimate.o payload.o history.o delay-servo.o acker.o saturateservo.o select.o packetsocket.o
+source = send1way.cc socket.cc buffer-setpoint.cc hist.cc controlled-delay.cc rate-estimate.cc payload.cc history.cc delay-servo.cc saturatr.cc acker.cc saturateservo.cc cellsim.cc select.cc packetsocket.cc logger.cc
+objects = socket.o hist.o rate-estimate.o payload.o history.o delay-servo.o acker.o saturateservo.o select.o packetsocket.o logger.o
 executables = send1way buffer-setpoint controlled-delay saturatr cellsim
 
 CXX = g++
-CXXFLAGS = -g -O3 -std=c++0x -ffast-math -pedantic -Werror -Wall -Wextra -Weffc++ -fno-default-inline -pipe -D_FILE_OFFSET_BITS=64 -D_XOPEN_SOURCE=500 -D_GNU_SOURCE
-LIBS = -lm -lrt
+MYSQL_FLAGS=$(shell mysql_config --cflags)
+MYSQL_LIBS=$(shell mysql_config --libs)
+CXXFLAGS = -g -O3 -std=c++0x -ffast-math -pedantic -Werror -Wall -Wextra -Weffc++ -fno-default-inline -pipe -D_FILE_OFFSET_BITS=64 -D_XOPEN_SOURCE=500 -D_GNU_SOURCE $(MYSQL_FLAGS)
+LIBS = -lm -lrt $(MYSQL_LIBS)
 
 all: $(executables)
 

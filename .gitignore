@@ -1,2 +1,3 @@
 *.o
 *~
+mysql_credentials.hh
